@@ -1,0 +1,10 @@
+resources:
+  - https.yml
+  - config.yml
+  - deployment.yml
+  - service.yml
+  - ingress.yml
+  - certificate.yml
+  - cron.yml
+
+namespace: dxdprojects

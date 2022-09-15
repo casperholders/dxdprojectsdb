@@ -1,0 +1,58 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: postgrest
+  name: postgrest
+spec:
+  selector:
+    matchLabels:
+      app: postgrest
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        app: postgrest
+        name: postgrest
+    spec:
+      containers:
+        - name: postgrest
+          image: postgrest/postgrest:v8.0.0.20211102
+          ports:
+            - containerPort: 3000
+          imagePullPolicy: Always
+          resources: { }
+          envFrom:
+            - configMapRef:
+                name: postgrest-config
+      restartPolicy: Always
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: dxdprojects-db
+  name: dxdprojects-db
+spec:
+  selector:
+    matchLabels:
+      app: dxdprojects-db
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        app: dxdprojects-db
+        name: dxdprojects-db
+    spec:
+      containers:
+        - name: dxdprojects-db
+          image: postgres:latest
+          ports:
+            - containerPort: 5432
+          env:
+            - name: POSTGRES_HOST_AUTH_METHOD
+              value: "trust"
+            - name: POSTGRES_DB
+              value: "dxd"

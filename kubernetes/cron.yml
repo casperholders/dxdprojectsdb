@@ -1,0 +1,18 @@
+apiVersion: batch/v1beta1
+kind: CronJob
+metadata:
+  name: update-db
+spec:
+  # Backup the database every day at 2AM
+  schedule: "0 2 * * *"
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          containers:
+            - name: update-db
+              image: killianh/dxdprojectsdb:latest
+              env:
+                - name: DATABASE_URL
+                  value: "postgres://postgres@dxddb-service:5432/dxd"
+          restartPolicy: Never
