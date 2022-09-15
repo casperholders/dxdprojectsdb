@@ -23,6 +23,39 @@ for (const project of data) {
     console.log(project.tags);
     throw e;
   }
+  if (project.status === 'approved') {
+    project.status = 'In discussion';
+    const gvotes = project.votes.filter((i) => i.content_type === 'grant');
+    for (const gvote of gvotes) {
+      if (gvote.type === 'informal') {
+        project.status = 'Informal Voting'
+      }
+      if (gvote.type === 'formal') {
+        project.status = 'Formal Voting'
+      }
+      if (gvote.status === 'active') {
+        project.status = project.status + ' Live'
+      }
+      if (gvote.status === 'completed' && gvote.result === 'success') {
+        project.status = project.status + ' Passed'
+      }
+      if (gvote.status === 'completed' && gvote.result === 'no-quorum') {
+        project.status = project.status + ' No Quorum'
+      }
+      if (gvote.status === 'completed' && gvote.result === 'fail') {
+        project.status = project.status + ' Failed'
+      }
+    }
+  }
+  if (project.status === 'denied') {
+    project.status = 'Denied';
+  }
+  if (project.status === 'payment') {
+    project.status = 'Payment Waiting';
+  }
+  if (project.status === 'completed') {
+    project.status = 'Completed';
+  }
   statuses.add(project.status)
   if (project.votes) {
     const mvotes = project.votes.filter((i) => i.content_type === 'milestone');
