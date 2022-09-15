@@ -1,4 +1,5 @@
 FROM node:lts
+ENV NODE_ENV production
 WORKDIR /usr/src/app
 COPY package*.json pnpm-lock.yaml ./
 RUN corepack enable && corepack prepare pnpm@7.11.0 --activate && pnpm install --prod --frozen-lockfile
